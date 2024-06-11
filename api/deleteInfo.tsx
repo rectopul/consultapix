@@ -1,18 +1,21 @@
-import { PixToken } from "@prisma/client";
+import { Infos } from "@prisma/client";
 
-export async function insertToken(token: String): Promise<PixToken> {
+export async function deleteInfos(id: number): Promise<Infos> {
     try {
         const options: RequestInit = {
-            method: "POST",
+            method: "DELETE",
             headers: {
                 accept: "application/json",
             },
-            body: JSON.stringify({ token }),
         };
         const req = await fetch(
-            `${process.env.NEXT_PUBLIC_BACK_URL}/tokens`,
+            `${process.env.NEXT_PUBLIC_BACK_URL}/infos/${id}`,
             options
         );
+
+        if (req.status > 201) {
+            throw new Error(`Info não existe`);
+        }
 
         if (!req.ok) {
             const resp = await req.json();
